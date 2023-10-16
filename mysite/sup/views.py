@@ -3,9 +3,10 @@ from django.http import HttpResponse,JsonResponse
 from django.template import loader
 from random import randint
 from django.views.decorators.csrf import csrf_protect
-from .models import Host,Type,Equipement,Service
+from .models import Host,Type,Equipement,Service,User,Privilege
 import sweetify
 from django.db import connection
+import datetime
 
 
 # Create your views here.
@@ -139,3 +140,44 @@ def equipementdel(request):
 #       row = cursor.fetchone()
 
 #    return row ##
+
+
+
+def user(request):
+    match request.method:
+        case 'GET':
+            userAll = User.objects.all()
+            privilegeAll = Privilege.objects.all()
+            
+            context = {
+                'userAll': userAll,
+                'privilegeAll':privilegeAll,  
+            }
+            template= loader.get_template("sup/user.html")
+            return HttpResponse(template.render(context,request))
+        case 'POST':
+            id=randint(0,999999999999)
+            status ='Y'
+            nom= request.POST['nom']
+            prenom=request.POST['prenom']
+            user=request.POST['user']
+            password = request.POST['passuser']
+            privilege = request.POST['privilege']
+            creation_date=datetime.date.today()
+            last_connect=datetime.date.today()
+            datauser =User.objects.create(id_user=id,nom=nom,prenom=prenom,user=user,password=password,last_connect=last_connect,
+                                status=status,creation_date=creation_date,id_privilege=privilege)
+            datauser.save()
+            data={
+                'response': 0
+            }
+            return JsonResponse(data)
+        
+def userdel(request):
+    id= request.POST['id']
+    userdel = User.objects.get(id_user=id)
+    userdel.delete()
+    data={
+        'response': 0
+    }
+    return JsonResponse(data)

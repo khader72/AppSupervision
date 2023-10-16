@@ -137,7 +137,7 @@
 
 				<div class="sidebar-heading">Compte</div>
 				<li class="nav-item">
-					<a class="nav-link" href="">
+					<a class="nav-link" href="{% url 'user' %}">
 						<i class="fas fa-fw fa-user"></i>
 						<span>Utilisateur</span></a
 					>
@@ -669,16 +669,25 @@
 			            });
 
 			            $.ajax({
-			                type: 'DELETE',
-			                url: '/user',
-			                data: {
-			                    id: id
+			                type: 'POST',
+			                url: 'userdel',
+                            data: {
+			                    id: id,
+			                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+			                    // csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+
 			                },
 			                success: function(result) {
-
+			                    //var objet = JSON.parse(result);
+			                    data = JSON.stringify(result);
+			                    // alert(data);
+			                    var objet = JSON.parse(data);
+			                    //alert(objet.response);
+			                    console.log(objet);
+			                    res = objet.response
 			                    // alert(result);
-			                    switch (result) {
-			                        case '0':
+			                    switch (res) {
+			                        case 0:
 			                            swal({
 			                                title: "Réussi",
 			                                text: "Informations supprimé",
@@ -972,19 +981,27 @@
 			            });
 			            $.ajax({
 			                type: 'POST',
-			                url: '/user',
+			                url: 'user',
 			                data: {
 			                    nom: nom,
 			                    prenom: prenom,
 			                    user: user,
 			                    passuser: pass,
-			                    privilege: privilege
-			                },
-			                success: function(result) {
+			                    privilege: privilege,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}',
 
-			                    // alert(result);
-			                    switch (result) {
-			                        case '0':
+                                },
+                                success: function(result) {
+                                    //var objet = JSON.parse(result);
+                                    data = JSON.stringify(result);
+                                // alert(data);
+                                    var objet = JSON.parse(data);
+                                    //alert(objet.response);
+                                    console.log(objet);
+                                    res = objet.response
+                                    switch (res) {
+ 
+			                        case 0:
 			                            swal({
 			                                title: "Réussi",
 			                                text: "Informations enregister",

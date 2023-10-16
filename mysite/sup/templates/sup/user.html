@@ -50,16 +50,16 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach($userAll as $user)
+                            {%for user in userAll %}
                             <tr>
-                                <td>{{$user->nom}}</td>
-                                <td>{{$user->prenom}}</td>
-                                <td>{{$user->user}}</td>
-                                <td><button class="btn btn-primary" data-toggle="modal" data-target=".edit_{{$user->id_user}}"><i class="fas fa-edit"></i></button>
-                                    <button onclick="deleteUser('{{$user->id_user}}')" class="btn btn-danger"><i class="fas fa-trash"></i></button><br><br>
+                                <td>{{user.nom}}</td>
+                                <td>{{user.prenom}}</td>
+                                <td>{{user.user}}</td>
+                                <td><button class="btn btn-primary" data-toggle="modal" data-target=".edit_{{user.id_user}}"><i class="fas fa-edit"></i></button>
+                                    <button onclick="deleteUser('{{user.id_user}}')" class="btn btn-danger"><i class="fas fa-trash"></i></button><br><br>
                                 </td>
                             </tr>
-                            @endforeach
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -94,16 +94,16 @@
                     </div>
                     <div class="col-sm-4">
                         Mot de passe
-                        <input type="text" class="form-control" id="passuser" />
+                        <input type="password" class="form-control" id="passuser" />
                     </div>
 
                     <div class="col-sm-4">
                         Role
                         <select id="selectprivilege" class="form-control" name="privilege">
                             <option value=""></option>
-                            @foreach($privilegeAll as $privilege)
-                            <option value="{{$privilege->id_privilege}}">{{$privilege->lib_privilege}}</option>
-                            @endforeach
+                            {% for privilege in privilegeAll %}
+                            <option value="{{privilege.id_privilege}}">{{privilege.lib_privilege}}</option>
+							{% endfor %}
                         </select>
                     </div>
                 </div>
@@ -118,9 +118,9 @@
     </div>
 </div>
 
-@foreach($userAll as $user)
+{%for user in userAll %}
 
-<div class="modal fade edit_{{$user->id_user}}">
+<div class="modal fade edit_{{user.id_user}}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -131,26 +131,26 @@
                 <div class="row">
                     <div class="col-sm-4">
                         Nom
-                        <input type="text" class="form-control" id="u_nomuser_{{$user->id_user}}" value="{{$user->nom}}" />
+                        <input type="text" class="form-control" id="u_nomuser_{{user.id_user}}" value="{{user.nom}}" />
                     </div>
                     <div class="col-sm-4">
                         Prenom
-                        <input type="text" class="form-control" id="prenom_{{$user->id_user}}" value="{{$user->prenom}}" />
+                        <input type="text" class="form-control" id="prenom_{{user.id_user}}" value="{{user.prenom}}" />
                     </div>
                     <div class="col-sm-4">
                         Login
-                        <input type="text" class="form-control" id="login_{{$user->id_user}}" value="{{$user->user}}" />
+                        <input type="text" class="form-control" id="login_{{user.id_user}}" value="{{user.user}}" />
                     </div>
 
                 </div><br>
                 <br><br>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button onclick="updateUser('{{$user->id_user}}')" class="btn btn-primary">Enregistrer</button>
+                    <button onclick="updateUser('{{user.id_user}}')" class="btn btn-primary">Enregistrer</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endforeach
-@stop
+{% endfor %}
+{% endblock %}

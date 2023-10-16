@@ -12,5 +12,8 @@ urlpatterns = [
 
     path("equipement", views.equipement, name="equipement"),
     path("equipementdel", views.equipementdel, name="equipementdel"),
+
+    path("user", views.user, name="user"),
+    path("userdel", views.userdel, name="userdel"),
     
 ]
