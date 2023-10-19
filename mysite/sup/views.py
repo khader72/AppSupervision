@@ -7,7 +7,9 @@ from .models import Host,Type,Equipement,Service,User,Privilege
 import sweetify
 from django.db import connection
 import datetime
+from django.contrib.auth import login, authenticate
 
+from .authentification import forms
 
 # Create your views here.
 
@@ -181,3 +183,37 @@ def userdel(request):
         'response': 0
     }
     return JsonResponse(data)
+
+def login(request):
+    form = forms.LoginForm()
+    message = ''
+    if request.method == 'POST':
+        form = forms.LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
+            if user is not None:
+                #login(request, user)
+                #message = f'Bonjour, {user.username}! Vous êtes connecté.'
+                data={
+                    'response': 0
+                }
+                return JsonResponse(data)
+            else:
+                #message = 'Identifiants invalides.'
+                data={
+                    'response': 1
+                }
+                return JsonResponse(data)
+        else:        #return render(request, 'sup/login.html', context={'form': form, 'message': message})
+            data={
+                'response': 2
+            }
+            return JsonResponse(data)
+    else:
+        data={
+                'response': 3
+            }
+        return JsonResponse(data)

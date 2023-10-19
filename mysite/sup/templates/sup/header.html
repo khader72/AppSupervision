@@ -1055,25 +1055,27 @@
 			            //field table
 			            nom = $('#user').val();
 			            pass = $('#password').val();
-			            $.ajaxSetup({
-			                headers: {
-			                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			                }
-			            });
+			            
 			            $.ajax({
 			                type: 'POST',
-			                url: '/login',
+			                url: 'login',
 			                data: {
-			                    nom: nom,
-			                    prenom: prenom,
 			                    user: user,
-			                    passuser: pass
-			                },
-			                success: function(result) {
+			                    passuser: pass,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}',
 
-			                    // alert(result);
-			                    switch (result) {
-			                        case '0':
+                            },
+                            success: function(result) {
+                                //var objet = JSON.parse(result);
+                                data = JSON.stringify(result);
+                                // alert(data);
+                                var objet = JSON.parse(data);
+                                //alert(objet.response);
+                                console.log(objet);
+                                res = objet.response
+                                switch (res) {
+                                //alert
+                                    case 0:
 			                            swal({
 			                                title: "Réussi",
 			                                text: "Informations enregister",
